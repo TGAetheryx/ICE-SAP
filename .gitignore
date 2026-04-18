@@ -1,0 +1,44 @@
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environments
+.env
+.venv
+venv/
+env/
+
+# Data (large files — download separately)
+data/*.tif
+data/*.nc
+data/*.h5
+data/*.hdf5
+*.pt
+*.pth
+*.onnx
+
+# Outputs
+outputs/
+results/
+checkpoints/
+logs/
+*.log
+
+# Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

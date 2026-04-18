@@ -1,0 +1,73 @@
+# ICE-SAP Model Configuration
+# Matches architecture described in all three papers.
+
+model:
+  name: "TGlacierEdge-UNet-SAP"
+  version: "1.0.0"
+  backbone: "MobileNetV2"
+  in_channels: 6
+  num_classes: 1
+  input_size: [256, 256]
+
+  # SAP compression (ICE-SAP §3.3, TGlacierEdge §III.B)
+  channel_retention_rate: 0.166      # 16.6% = 83.4% compression
+  compression_ratio: 0.834
+  iou_loss_pp: 0.5                   # vs. uncompressed
+
+  # SAAQ quantization (ICE-SAP §3.3)
+  quantization: "INT8_asymmetric_per_channel"
+  calibration_patches: 512
+  kl_convergence_threshold: 0.005   # nats
+  speedup_vs_float32: 4.1            # FPS: 1.2 → 4.9
+
+  # Sentinel-2 band order
+  bands: [B2, B3, B4, B11, B12, B10]
+  band_wavelengths_nm: [490, 560, 665, 1614, 2202, 1375]
+
+  # Performance (physical RPi 4, 26-scene test set)
+  overall_iou_pct: 91.0
+  boundary_iou_pct: 90.5
+  ice_edge_error_m: 8.2
+  jokulhlaup_recall_pct: 98.7
+  fps_int8_rpi4: 4.9
+  peak_power_mw: 320
+  avg_power_mw: 23.9
+  model_size_mb_int8: 4.8
+  model_size_mb_float32: 26.7
+  inference_latency_ms: 201
+
+meta_net:
+  name: "MetaNetMLP"
+  variant: "mlp"
+  in_features: 4
+  hidden_units: 16
+  sigma_min_px: 4.0
+  sigma_max_px: 8.0
+  n_parameters: 177
+  size_kb: 1.2
+  power_mw: 2.0
+  r2_ablation_width: 0.83
+  calving_precursor_lag_h: [12, 24]
+
+# Training details (ICE-SAP §4.1)
+training:
+  optimizer: "SGD"
+  lr: 0.01
+  momentum: 0.9
+  weight_decay: 1.0e-4
+  epochs: 100
+  lr_schedule: "cosine_annealing"
+  gpu: "RTX 3090"
+  loss: "L_geo (boundary-weighted CE + Dice)"
+  augmentation: [horizontal_flip, rotation_90, gaussian_noise_0.01]
+
+# Deployment pipeline (§4.1)
+pipeline:
+  - "Train with L_geo"
+  - "WSA-guided pruning (top 16.6% channels)"
+  - "INT8 spectral-aware quantization (512 calibration patches)"
+  - "ONNX export (opset 17, ONNX Runtime 1.16)"
+  - "Deploy with cascaded startup + SBT+S-ARQ"
+
+checksum:
+  sha256: "placeholder_replace_with_actual_hash_after_full_training"

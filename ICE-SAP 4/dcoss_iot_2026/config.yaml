@@ -1,0 +1,79 @@
+# TGlacierEdge — DCOSS-IoT 2026 Poster
+# Configuration file
+
+dataset:
+  name: "Vatnajökull"
+  n_scenes: 122
+  date_range: ["2019-01-01", "2023-12-31"]
+  split: [76, 20, 26]      # train / val / test
+  n_trials: 5
+  alpha: 0.05
+  resolution_m: 10
+  patch_size: 128           # 128×128 six-band patches (§III.A)
+  n_bands: 6
+
+system:
+  hardware: "Raspberry Pi 4 (4 GB)"
+  runtime: "ONNX Runtime 1.16, INT8"
+  peak_power_mw: 320
+  avg_power_mw: 23.9
+  battery_mah: 4000
+  battery_life_days: 24.6
+  duty_cycle_min: 30        # 30-min duty cycle
+  inference_latency_ms: 201
+  with_sbt_latency_ms: 204
+  model_size_mb: 4.8
+  fps: 4.9
+
+# 3-node deployment (§III.A)
+multi_node:
+  n_nodes: 3
+  node_spacing_m: [490, 510]   # 490–510 m apart
+  boundary_tile_px: 16         # 16-px boundary tiles exchanged between nodes
+  tau: 0.5                     # τ-passing threshold
+
+sap:
+  retention_rate: 0.166
+  compression_pct: 83.4
+  iou_loss_pp: 0.5
+  sigma_vatnajokull_px: 5      # σ_meta = 5 px at Vatnajökull = 50 m
+
+saaq:
+  bit_width: 8
+  fps_gain: 4.1
+  calibration_patches: 512
+  kl_threshold: 0.005
+
+sbt_sarq:
+  tile_size: 16
+  tau: 0.5
+  uplink_original_mb: 18.4
+  uplink_compressed_mb: 1.1
+  reduction_pct: 93.8
+  rs_n: 15
+  rs_k: 9
+  max_retransmit: 3
+  loss_recovery_pct: 20
+  lora_payload_kb: 6
+  lora_tx_time_s: [215, 237]
+
+cascaded_startup:
+  L1_mw: 15
+  L2_mw: 80
+  L3_mw: 320
+  avg_mw: 23.9
+  battery_life_days: 24.6
+
+lora:
+  spreading_factor: 12
+  bandwidth_khz: 125
+  tx_power_dbm: 14
+  node_separation_m: 510
+  min_24h_uptime_pct: 98.3
+
+fault_tolerance:
+  single_node_iou_loss_pp: 2.9
+  dual_node_comm_iou_loss_pp: 4.7
+  seasonal_iou_loss_pp: 0.3
+
+seed: 42
