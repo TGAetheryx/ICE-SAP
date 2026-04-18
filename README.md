@@ -18,7 +18,13 @@ ICE-SAP/
 ├── dcoss_iot_2026/                # Paper 3 — DCOSS-IoT 2026
 ├── examples/                      # Quick-start scripts and sample data
 ├── data/                          # Data download instructions
-└── docs/                          # Installation, usage, hardware setup
+├── docs/                          # Installation, usage, hardware setup
+│
+├── unet_float32.onnx              # Paper 2/3 — U-Net FP32 ONNX export
+├── unet_int8.tflite               # Paper 2/3 — U-Net INT8 TFLite (SAAQ)
+├── meta_net_weights.pth           # Paper 2 — Meta-Net trained weights (1.2 KB)
+├── unet_model_config.yaml         # Architecture / input / preprocessing config
+└── unet_int8_quantization_params.json   # Per-channel INT8 scales & zero-points
 ```
 
 ---
@@ -88,12 +94,12 @@ Delineation at the Polar Edge"**
 ## Quick Start
 
 ```bash
-git clone https://github.com/[to-be-confirmed]/ICE-SAP.git
+git clone https://github.com/TGAetheryx/ICE-SAP.git
 cd ICE-SAP
 pip install -r requirements.txt
 
-# Run example inference
-python examples/run_example.py --input examples/sample_input/test_tile_512x512.tif
+# Run example inference (uses a synthetic 6-channel 128x128 patch by default)
+python examples/run_example.py
 ```
 
 ---
@@ -113,6 +119,24 @@ scikit-image>=0.20.0
 rasterio>=1.3.0
 matplotlib>=3.7.0
 ```
+
+---
+
+## Pre-trained Model Artifacts
+
+The repository root ships the trained model artifacts used in Papers 2 and 3, so
+you can reproduce inference without re-training:
+
+| File | Purpose | Consumed by |
+|---|---|---|
+| `unet_float32.onnx` | U-Net FP32 ONNX export | ONNX Runtime baseline benchmark |
+| `unet_int8.tflite` | U-Net INT8 TFLite (after SAAQ) | RPi 4 edge inference |
+| `meta_net_weights.pth` | Meta-Net weights (1.2 KB, <2 mW at inference) | σ_meta predictor |
+| `unet_model_config.yaml` | Architecture / input channels / preprocessing | Loader for both FP32 and INT8 |
+| `unet_int8_quantization_params.json` | Per-channel INT8 scales & zero-points | SAAQ runtime dequantisation |
+
+These are binary/config artefacts — treat them as read-only. Training code lives
+in the per-paper directories.
 
 ---
 
