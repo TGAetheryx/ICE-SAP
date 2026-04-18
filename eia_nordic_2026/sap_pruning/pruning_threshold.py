@@ -4,7 +4,7 @@ Pruning threshold determination and validation.
 Validates the 16.6% retention threshold via Pareto front analysis:
   - IoU vs. retention sweep
   - Cliff detection at <15%
-  - σ_meta robustness: 4–8 px → IoU ≤0.2 pp, B-IoU ≤0.3 pp
+  - σ_meta robustness: 4–10 px → IoU ≤0.2 pp, B-IoU ≤0.3 pp
 """
 import numpy as np
 from typing import Dict, Tuple
@@ -24,20 +24,20 @@ def validate_sigma_robustness(
     seed: int = 42,
 ) -> Dict[float, Dict]:
     """
-    Validate SAP robustness to σ_meta variation (4–8 px).
+    Validate SAP robustness to σ_meta variation (4–10 px).
 
-    Paper result: varying σ_meta from 4–8 px changes IoU by ≤0.2 pp
-    and Boundary IoU by ≤0.3 pp (ICE-SAP §III.B).
+    Paper result: varying σ_meta from 4–10 px changes IoU by ≤0.2 pp
+    and Boundary IoU by ≤0.3 pp (ICE-SAP §3.1, §3.6).
 
     Args:
-        sigma_values: List of σ values to test (default [4,5,6,7,8]).
+        sigma_values: List of σ values to test (default [4..10]).
         n_trials:     Number of simulation trials.
 
     Returns:
         dict mapping σ → {iou_mean, iou_std, biou_mean, biou_std}.
     """
     if sigma_values is None:
-        sigma_values = [4.0, 5.0, 6.0, 7.0, 8.0]
+        sigma_values = [4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
 
     np.random.seed(seed)
     results = {}
@@ -59,7 +59,7 @@ def validate_sigma_robustness(
                 min(r["iou_mean"] for r in results.values())
     biou_range = max(r["biou_mean"] for r in results.values()) - \
                  min(r["biou_mean"] for r in results.values())
-    print(f"σ_meta robustness (4–8 px):")
+    print(f"σ_meta robustness (4–10 px):")
     print(f"  IoU range:   {iou_range:.3f} pp  (paper: ≤0.2 pp)")
     print(f"  B-IoU range: {biou_range:.3f} pp  (paper: ≤0.3 pp)")
     return results

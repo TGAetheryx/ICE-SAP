@@ -73,14 +73,14 @@ class PerChannelClipCalibrator:
         return {
             "n_layers_calibrated": len(self._layer_bounds),
             "total_channels": total_channels,
-            "expected_speedup": "4.1×",    # from ICE-SAP §III.C
+            "expected_speedup": "4.1×",    # from ICE-SAP §3.3
             "expected_fps": 4.9,
-            "model_size_mb": 4.8,
+            "model_size_mb": 1.8,          # after WSA pruning + SAAQ (Table 3)
         }
 
 
 def spectral_aware_calibration_split(
-    n_patches: int = 512,
+    n_patches: int = 2000,
     optical_frac: float = 0.62,
     swir_frac: float = 0.28,
     thermal_frac: float = 0.10,
@@ -89,7 +89,7 @@ def spectral_aware_calibration_split(
     """
     Determine calibration patch counts per spectral type.
 
-    ICE-SAP §3.3 calibration: 512 patches (optical 62%, SWIR 28%, thermal 10%).
+    ICE-SAP §3.3 calibration: 2,000 patches (optical 62%, SWIR 28%, thermal 10%).
     This spectral-diverse composition handles the ~10× SWIR/RGB reflectance gap.
     """
     assert abs(optical_frac + swir_frac + thermal_frac - 1.0) < 1e-6
@@ -102,9 +102,9 @@ def spectral_aware_calibration_split(
 
 
 if __name__ == "__main__":
-    split = spectral_aware_calibration_split(512)
+    split = spectral_aware_calibration_split(2000)
     print(f"Calibration split: {split}")
-    print(f"Total: {sum(split.values())} patches  (paper: 512)")
+    print(f"Total: {sum(split.values())} patches  (paper: 2,000)")
 
     calibrator = PerChannelClipCalibrator()
     np.random.seed(0)

@@ -50,9 +50,9 @@ def print_cross_site_table():
 
 
 def sigma_sensitivity_analysis():
-    """Reproduce σ robustness: 4–8 px → ≤0.2 pp IoU change."""
-    print(f"\n[σ_meta Sensitivity — §III.B]")
-    sigma_vals = [4, 5, 6, 7, 8]
+    """Reproduce σ robustness: 4–10 px → ≤0.2 pp IoU change (ICE-SAP §3.1)."""
+    print(f"\n[σ_meta Sensitivity — §3.1]")
+    sigma_vals = [4, 5, 6, 7, 8, 9, 10]
     np.random.seed(1)
     ious = np.array([91.0 + (s - 5) * 0.025 + np.random.randn() * 0.08
                      for s in sigma_vals])

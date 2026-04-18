@@ -3,11 +3,11 @@ KL-divergence calibration for SAAQ (Spectral-Aware Asymmetric Quantization).
 
 Calibration criterion (ICE-SAP §3.3):
   Convergence: KL(P_float ‖ P_int8) < 0.005 nats
-  Calibration set: 512 patches (optical 62%, SWIR 28%, thermal 10%)
-  Typically 40–60 iterations; stable on Vatnajökull and all 14 cross-sites.
+  Calibration set: 2,000 patches (optical 62%, SWIR 28%, thermal 10%)
+  200 iterations; stable across all 56 sites.
 
 Result:
-  4.9 FPS (4.1× over float32), 4.8 MB, 320 mW, no fine-tuning.
+  4.9 FPS (4.1× over float32), 1.8 MB deployed, 320 mW, no fine-tuning.
   Standard global-scale PTQ: 1.9 FPS, 2.1 pp IoU loss.
 
 References:
@@ -68,7 +68,7 @@ def find_optimal_clip_bounds_kl(
     n_bits: int = 8,
     n_bins: int = 2048,
     convergence_threshold: float = 0.005,
-    max_iterations: int = 60,
+    max_iterations: int = 200,
     n_search_steps: int = 100,
 ) -> Tuple[float, float, float, int]:
     """
@@ -151,7 +151,7 @@ def calibrate_all_channels(
     layer_activations: np.ndarray,
     n_bits: int = 8,
     convergence_threshold: float = 0.005,
-    max_iterations: int = 60,
+    max_iterations: int = 200,
 ) -> dict:
     """
     Calibrate all channels of a layer.

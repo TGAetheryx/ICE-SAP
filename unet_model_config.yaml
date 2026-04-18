@@ -42,7 +42,7 @@ meta_net:
   in_features: 4
   hidden_units: 16
   sigma_min_px: 4.0
-  sigma_max_px: 8.0
+  sigma_max_px: 10.0              # ICE-SAP Thm. 2 architectural range
   n_parameters: 177
   size_kb: 1.2
   power_mw: 2.0

@@ -69,13 +69,13 @@ def print_saaq_summary():
     """Print SAAQ configuration summary."""
     print("\n=== SAAQ: Spectral-Aware Asymmetric Quantization ===")
     print(f"  Bit width:          INT8 (asymmetric, per-channel)")
-    print(f"  Calibration:        512 patches "
+    print(f"  Calibration:        2,000 patches "
           f"({CALIBRATION_COMPOSITION})")
-    print(f"  Convergence:        KL < 0.005 nats, typically 40–60 iters")
+    print(f"  Convergence:        KL < 0.005 nats, 200 iterations")
     print(f"  SWIR/RGB gap:       ~{SWIR_RGB_RATIO:.0f}× reflectance range")
     print(f"  Result:")
     print(f"    FPS:              4.9 (4.1× over float32)")
-    print(f"    Model size:       4.8 MB")
+    print(f"    Model size:       1.8 MB  (after WSA pruning + SAAQ)")
     print(f"    Power:            320 mW")
     print(f"    IoU loss:         0 pp (no fine-tuning)")
     print(f"  Baseline (global PTQ):")
