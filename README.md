@@ -5,6 +5,27 @@ polar glacier monitoring using IoT edge AI:
 
 ---
 
+## Configuration Matrix
+
+This repository contains two deployment configurations of TGlacierEdge,
+corresponding to **snapshots at different points along the SAP pruning Pareto
+curve** (ICE-SAP §3.3, Fig. 2). Both are functionally valid operating points;
+readers should use the directory matching the paper they are referencing.
+
+| Directory | Model size | SAAQ calibration | Pareto operating point | Reported in |
+|---|---|---|---|---|
+| `dcoss_iot_2026/` | **4.8 MB** | 512 patches / 40–60 iter | Earlier compression variant (~50% channel retention) | Paper 3 — DCOSS-IoT 2026 (poster) |
+| `eia_nordic_2026/` | **1.8 MB** | 2 000 patches / 200 iter | Final Pareto-optimal point (16.6% retention) | Paper 2 — EIA Nordic 2026 (long paper) |
+| `computers_geosciences_2026/` | n/a (theory) | n/a | — | Paper 1 — Computers & Geosciences 2026 |
+
+The 1.8 MB configuration is obtained from the 4.8 MB configuration by one
+additional pass of WSA-guided pruning down to the Pareto-optimal 16.6%
+channel-retention point, with correspondingly expanded SAAQ calibration. The
+two sizes are therefore the same model at different stages of the compression
+trajectory, not independent models.
+
+---
+
 ## Repository Structure
 
 ```
