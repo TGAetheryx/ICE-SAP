@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "ICE-SAP: Integrated Cryosphere Edge Sensing — Adaptive Pipeline"
+url: "https://github.com/TGAetheryx/ICE-SAP"
+repository-code: "https://github.com/TGAetheryx/ICE-SAP"
+authors:
+  - family-names: Tang
+    given-names: Guo
+    orcid: "https://orcid.org/0009-0006-8419-0236"
+    affiliation: "School of Mathematics and Computational Science, Xiangtan University"
